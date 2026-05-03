@@ -31,7 +31,7 @@
             <div class="one-page-content">
 
                 <!-- About -->
-                <section class="one-page-section about-section">
+                <section class="one-page-section about-section reveal">
                     <h2 data-en="About" data-de="&Uuml;ber mich">About</h2>
                     <p data-en="Originally from Istanbul, with a background in Economics (Istanbul Technical University) and a Master's in Quantitative Management Science (Humboldt University of Berlin). Previously worked at Turkish Airlines (Istanbul), Recare (Berlin), and HeyJobs (Berlin) before joining HelloFresh." data-de="Urspr&uuml;nglich aus Istanbul, mit einem Hintergrund in Wirtschaftswissenschaften (Technische Universit&auml;t Istanbul) und einem Master in Quantitative Management Science (Humboldt-Universit&auml;t zu Berlin). Zuvor t&auml;tig bei Turkish Airlines, Recare und HeyJobs, bevor ich zu HelloFresh kam.">
                         Originally from Istanbul, with a background in Economics (Istanbul Technical University)
@@ -47,7 +47,7 @@
                         at HelloFresh &mdash; from loyalty program experimentation and tracking concepts to
                         business-ready ML projects like churn prediction and customer segmentation.
                     </p>
-                    <p class="highlight" data-en="Actively building with GenAI/LLMs &mdash; creating shareable skills and automated workflows that connect data catalogs, pipelines, and documentation tooling. Driving AI adoption within the team by identifying common pain points and encoding best practices into reusable, standardised workflows." data-de="Arbeite aktiv mit GenAI/LLMs &mdash; erstelle teilbare Skills und automatisierte Workflows, die Datenkataloge, Pipelines und Dokumentations-Tooling verbinden. Treibe die AI-Adoption im Team voran, indem ich gemeinsame Pain Points identifiziere und Best Practices in wiederverwendbare, standardisierte Workflows &uuml;berf&uuml;hre.">
+                    <p class="highlight reveal-left" data-en="Actively building with GenAI/LLMs &mdash; creating shareable skills and automated workflows that connect data catalogs, pipelines, and documentation tooling. Driving AI adoption within the team by identifying common pain points and encoding best practices into reusable, standardised workflows." data-de="Arbeite aktiv mit GenAI/LLMs &mdash; erstelle teilbare Skills und automatisierte Workflows, die Datenkataloge, Pipelines und Dokumentations-Tooling verbinden. Treibe die AI-Adoption im Team voran, indem ich gemeinsame Pain Points identifiziere und Best Practices in wiederverwendbare, standardisierte Workflows &uuml;berf&uuml;hre.">
                         Actively building with GenAI/LLMs &mdash; creating shareable skills and automated workflows
                         that connect data catalogs, pipelines, and documentation tooling. Driving AI adoption within
                         the team by identifying common pain points and encoding best practices into reusable,
@@ -56,7 +56,7 @@
                 </section>
 
                 <!-- Skills -->
-                <section class="one-page-section">
+                <section class="one-page-section reveal">
                     <h2 data-en="Skills" data-de="F&auml;higkeiten">Skills</h2>
                     <div class="skills-tags">
                         <span class="skill-tag">SQL (Spark / Databricks)</span>
@@ -71,7 +71,7 @@
                 </section>
 
                 <!-- Domains -->
-                <section class="one-page-section skills-bottom">
+                <section class="one-page-section skills-bottom reveal">
                     <h2 data-en="Domain Expertise" data-de="Fachkompetenz">Domain Expertise</h2>
                     <div class="skills-tags">
                         <span class="skill-tag" data-en="Loyalty &amp; Retention" data-de="Loyalit&auml;t &amp; Kundenbindung">Loyalty &amp; Retention</span>
@@ -84,7 +84,7 @@
                 </section>
 
                 <!-- Projects -->
-                <section class="one-page-section projects-section">
+                <section class="one-page-section projects-section reveal">
                     <h2 data-en="Projects" data-de="Projekte">Projects</h2>
                     <div class="carousel-container">
                         <div class="projects-carousel">
@@ -130,87 +130,59 @@
     </main>
 
     <script>
-        // Language toggle -- swaps textContent/innerHTML of all [data-en] elements
+        // Language toggle
         function setLang(lang) {
             document.querySelectorAll('.lang-btn').forEach(function(btn) {
                 btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
             });
-
             document.documentElement.lang = lang;
-
             document.querySelectorAll('[data-' + lang + ']').forEach(function(el) {
                 el.innerHTML = el.getAttribute('data-' + lang);
             });
         }
 
-        // Carousel -- native scroll with snap, drag support, indicator sync
+        // Scroll reveal -- fade in/out sections as they enter/leave viewport
+        (function() {
+            var reveals = document.querySelectorAll('.reveal, .reveal-left');
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            reveals.forEach(function(el) { observer.observe(el); });
+        })();
+
+        // Carousel
         (function() {
             var container = document.querySelector('.carousel-container');
             var indicators = document.querySelectorAll('.indicator');
             if (!container || indicators.length === 0) return;
-
             var totalPositions = indicators.length;
 
             function updateIndicators() {
                 var maxScroll = container.scrollWidth - container.clientWidth;
-                if (maxScroll <= 0) {
-                    indicators.forEach(function(ind, i) {
-                        ind.classList.toggle('active', i === 0);
-                    });
-                    return;
-                }
+                if (maxScroll <= 0) { indicators.forEach(function(ind, i) { ind.classList.toggle('active', i === 0); }); return; }
                 var ratio = container.scrollLeft / maxScroll;
                 var activeIndex = Math.round(ratio * (totalPositions - 1));
-                indicators.forEach(function(ind, i) {
-                    ind.classList.toggle('active', i === activeIndex);
-                });
+                indicators.forEach(function(ind, i) { ind.classList.toggle('active', i === activeIndex); });
             }
-
             container.addEventListener('scroll', updateIndicators, { passive: true });
-
             indicators.forEach(function(ind, i) {
                 ind.addEventListener('click', function() {
                     var maxScroll = container.scrollWidth - container.clientWidth;
-                    var target = (i / (totalPositions - 1)) * maxScroll;
-                    container.scrollTo({ left: target, behavior: 'smooth' });
+                    container.scrollTo({ left: (i / (totalPositions - 1)) * maxScroll, behavior: 'smooth' });
                 });
             });
 
-            var isDragging = false;
-            var startX = 0;
-            var startScroll = 0;
-            var hasDragged = false;
-
-            container.addEventListener('mousedown', function(e) {
-                isDragging = true;
-                hasDragged = false;
-                startX = e.pageX;
-                startScroll = container.scrollLeft;
-                container.classList.add('dragging');
-            });
-
-            window.addEventListener('mousemove', function(e) {
-                if (!isDragging) return;
-                e.preventDefault();
-                var diff = e.pageX - startX;
-                if (Math.abs(diff) > 3) hasDragged = true;
-                container.scrollLeft = startScroll - diff;
-            });
-
-            window.addEventListener('mouseup', function() {
-                if (!isDragging) return;
-                isDragging = false;
-                container.classList.remove('dragging');
-                container.style.scrollSnapType = '';
-            });
-
-            container.addEventListener('click', function(e) {
-                if (hasDragged) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    hasDragged = false;
-                }
-            }, true);
+            var isDragging = false, startX = 0, startScroll = 0, hasDragged = false;
+            container.addEventListener('mousedown', function(e) { isDragging = true; hasDragged = false; startX = e.pageX; startScroll = container.scrollLeft; container.classList.add('dragging'); });
+            window.addEventListener('mousemove', function(e) { if (!isDragging) return; e.preventDefault(); var diff = e.pageX - startX; if (Math.abs(diff) > 3) hasDragged = true; container.scrollLeft = startScroll - diff; });
+            window.addEventListener('mouseup', function() { if (!isDragging) return; isDragging = false; container.classList.remove('dragging'); container.style.scrollSnapType = ''; });
+            container.addEventListener('click', function(e) { if (hasDragged) { e.preventDefault(); e.stopPropagation(); hasDragged = false; } }, true);
         })();
     </script>
 </body>
