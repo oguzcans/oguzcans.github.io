@@ -24,7 +24,7 @@
                 <p class="title" data-en="Product Analyst" data-de="Produktanalyst">Product Analyst</p>
                 <p class="location" data-en="Berlin, Germany" data-de="Berlin, Deutschland">Berlin, Germany</p>
                 <p class="education" data-en="HelloFresh &middot; Customer Lifecycle &amp; Engagement" data-de="HelloFresh &middot; Customer Lifecycle &amp; Engagement">HelloFresh &middot; Customer Lifecycle &amp; Engagement</p>
-                <div class="callout" data-en="For future opportunities and collaboration, please reach out through &lt;a href='https://linkedin.com/in/oguzcankervanci' target='_blank' rel='noopener noreferrer'&gt;LinkedIn&lt;/a&gt;." data-de="F&uuml;r zuk&uuml;nftige M&ouml;glichkeiten und Zusammenarbeit, bitte &uuml;ber &lt;a href='https://linkedin.com/in/oguzcankervanci' target='_blank' rel='noopener noreferrer'&gt;LinkedIn&lt;/a&gt; melden.">For future opportunities and collaboration, please reach out through <a href="https://linkedin.com/in/oguzcankervanci" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</div>
+                <div class="callout" data-en="For collaboration, speaking, or connecting &mdash; find me on &lt;a href='https://linkedin.com/in/oguzcankervanci' target='_blank' rel='noopener noreferrer'&gt;LinkedIn&lt;/a&gt;." data-de="F&uuml;r Zusammenarbeit, Vortr&auml;ge oder Vernetzung &mdash; finde mich auf &lt;a href='https://linkedin.com/in/oguzcankervanci' target='_blank' rel='noopener noreferrer'&gt;LinkedIn&lt;/a&gt;.">For collaboration, speaking, or connecting — find me on <a href="https://linkedin.com/in/oguzcankervanci" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</div>
             </header>
 
             <!-- Content -->
@@ -151,7 +151,6 @@
 
             var totalPositions = indicators.length;
 
-            // Update active indicator based on scroll position
             function updateIndicators() {
                 var maxScroll = container.scrollWidth - container.clientWidth;
                 if (maxScroll <= 0) {
@@ -169,7 +168,6 @@
 
             container.addEventListener('scroll', updateIndicators, { passive: true });
 
-            // Indicator click scrolls to proportional position
             indicators.forEach(function(ind, i) {
                 ind.addEventListener('click', function() {
                     var maxScroll = container.scrollWidth - container.clientWidth;
@@ -178,7 +176,6 @@
                 });
             });
 
-            // Mouse drag to scroll
             var isDragging = false;
             var startX = 0;
             var startScroll = 0;
@@ -204,11 +201,9 @@
                 if (!isDragging) return;
                 isDragging = false;
                 container.classList.remove('dragging');
-                // Re-enable snap so it settles to nearest card
                 container.style.scrollSnapType = '';
             });
 
-            // Prevent clicks on links/buttons if user was dragging
             container.addEventListener('click', function(e) {
                 if (hasDragged) {
                     e.preventDefault();
